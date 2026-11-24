@@ -26,6 +26,8 @@ export const reviewSchema = z
             ),
         })
       )
-      .describe("One entry per finding you left unfixed. Empty is fine."),
+      .describe(
+        "One entry per finding you left unfixed in code this PR wrote. A breach that moved code carried over goes in the verdict instead. Empty is fine."
+      ),
   })
   .describe("The review's inline comments.");
