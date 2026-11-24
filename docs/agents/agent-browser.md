@@ -12,9 +12,33 @@ npm install -g agent-browser
 agent-browser install
 ```
 
+In the factory workflows (`.github/workflows/agent-*.yml`) this is done for
+you: agent-browser is installed and the dev server is already running on
+`http://localhost:5173`, logging to `/tmp/dev.log`.
+
+## Signing in
+
+Most pages need a signed-in Person. Sign in through the DevUI's endpoint, from
+inside the page so the browser keeps the cookie:
+
+```bash
+agent-browser open http://localhost:5173/
+agent-browser eval 'fetch("/api/switch-user", {method: "POST", body: new URLSearchParams({userId: "5"})}).then(r => r.status)'
+```
+
+Seeded people worth knowing (`npm run db:seed` resets them):
+
+| id  | Person      | Role       | Useful for                                                        |
+| --- | ----------- | ---------- | ----------------------------------------------------------------- |
+| 1   | Alex Rivera | admin      | admin pages                                                       |
+| 2   | Sarah Chen  | instructor | instructor pages                                                  |
+| 5   | Emma Wilson | student    | enrolled in `introduction-to-typescript`; lessons, notes, quizzes |
+
+Anyone else: `sqlite3 data.db "select id, name, role from users"`.
+
 ## Asking your own question
 
-Start the app with `npm run dev` first. The examples below use
+Outside the factory, start the app with `npm run dev` first. The examples below use
 `http://localhost:5173`, the dev server's default address — if `npm run dev`
 printed a different one, use that.
 

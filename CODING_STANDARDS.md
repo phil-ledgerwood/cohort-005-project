@@ -107,6 +107,12 @@ const [items, setItems] = useState(rows);
 const count = items.length;
 ```
 
+## A disabled control says why
+
+When a button or input is disabled, the person can see the reason next to it:
+"A note can't be empty", "Over the limit by 5 characters". A greyed-out control
+with no reason looks broken.
+
 ## A comment explains why
 
 Name and extract until a comment is unnecessary. A comment earns its place

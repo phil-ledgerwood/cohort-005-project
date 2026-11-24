@@ -68,10 +68,13 @@ module.exports = {
     {
       name: "no-circular",
       comment:
-        "No dependency cycles. Scope to `^${R}/` if you want to allow cycles outside packages.",
+        "No dependency cycles. Scope to `^${R}/` if you want to allow cycles outside packages. Type-only edges do not count: they vanish at runtime, and an adapter importing its port's types is not a cycle.",
       severity: "error",
       from: {},
-      to: { circular: true },
+      to: {
+        circular: true,
+        viaOnly: { dependencyTypesNot: ["type-only"] },
+      },
     },
 
     // --- Layering (optional, off by default) ----------------------------------
@@ -104,9 +107,30 @@ module.exports = {
         path: ["^app/db/index\\.ts$", "^node_modules/better-sqlite3/"],
       },
     },
+    {
+      name: "components-not-from-routes",
+      comment:
+        "Dependencies point from routes to components, never back. A component that needs a route's loader data takes it as explicit props, or the shape lives outside the route.",
+      severity: "error",
+      from: { path: "^app/components/" },
+      // A route's generated `+types` never resolve (they sit behind tsconfig
+      // rootDirs), so match the import as written as well.
+      to: { path: ["^app/routes/", "^~/routes/", "\\+types/"] },
+    },
+    {
+      name: "modules-not-from-components",
+      comment:
+        "Modules hold behaviour; components render it. A type both need lives in the module (or app/lib), and the component imports it from there.",
+      severity: "error",
+      from: { path: `^${R}/` },
+      to: { path: "^app/components/" },
+    },
   ],
   options: {
     doNotFollow: { path: "node_modules" },
+    // See type-only imports too: a component importing a route's +types is
+    // still a dependency on the route.
+    tsPreCompilationDeps: true,
     tsConfig: { fileName: "tsconfig.json" },
     enhancedResolveOptions: {
       extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],

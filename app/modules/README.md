@@ -24,6 +24,8 @@ Enforced by dependency-cruiser (`.dependency-cruiser.cjs`). Run `npm run lint:bo
 1. **Entry-point boundary.** Code outside a module (routes, `app/lib`, other modules) imports only that module's root files, never anything in its subfolders.
 2. **Intra-module freedom.** A module's own files import each other freely.
 3. **Tests through the entry points.** Files in `<module>/tests/` import any module's entry points and their own `tests/` fixtures, never any module's subfolder internals, not even their own. Nothing outside `tests/` may import from it.
-4. **No cycles.** No dependency cycles anywhere in `app/`.
+4. **No cycles.** No dependency cycles anywhere in `app/`. Type-only imports do not count.
+5. **Every module has tests.** At least one `*.test.ts` in `<module>/tests/` (`scripts/check-module-tests.js`).
+6. **Dependencies point inward.** A component never imports from a route (not even its `+types`), and a module never imports from a component.
 
 Modules are flat: one level of folders under `app/modules/`. A module may not contain another module.

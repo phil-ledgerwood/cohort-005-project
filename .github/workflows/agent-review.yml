@@ -170,6 +170,22 @@ jobs:
           npm run db:migrate
           npm run db:seed
 
+      - name: Start the app and the browser
+        # The agent checks UI changes with agent-browser
+        # (docs/agents/agent-browser.md). Ready before it starts, so no run
+        # spends its first minute installing and waiting. The log is
+        # /tmp/dev.log.
+        run: |
+          npm install -g agent-browser
+          agent-browser install
+          nohup npm run dev > /tmp/dev.log 2>&1 &
+          for _ in $(seq 1 60); do
+            curl -sf -o /dev/null http://localhost:5173/ && exit 0
+            sleep 1
+          done
+          cat /tmp/dev.log
+          exit 1
+
       - name: Open the branch
         run: |
           set -euo pipefail

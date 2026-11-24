@@ -38,6 +38,10 @@ if (oversized.length > 0) {
 Split each file before you commit. Do not delete code or squash it onto fewer
 lines to get under the limit.
 
+Make the split its own commit, before your change: a pure move, no behaviour
+change, and the same lint exemptions carried to the files the code moved
+into. A reviewer can then check the move and your change separately.
+
 How to split:
 - Find the seams. Look for groups of functions, components, or tests that
   change together and share little with the rest of the file.
