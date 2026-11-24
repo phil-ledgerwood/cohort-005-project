@@ -1,5 +1,5 @@
 {
-  "max-lines": 17,
+  "max-lines": 16,
   "max-lines-per-function": 148,
   "max-params": 49,
   "max-depth": 14

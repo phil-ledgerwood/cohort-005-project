@@ -4,12 +4,12 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { countryName } from "~/lib/ppp";
 import { CurriculumSidebar } from "./curriculum-sidebar";
-import type { LessonLoaderData } from "./types";
+import type { LockedLessonData } from "./types";
 
 export function LockedLesson({
   data: { course, curriculum, module: mod, lesson, enrolled, lockedReason },
 }: {
-  data: Extract<LessonLoaderData, { view: "locked" }>;
+  data: LockedLessonData;
 }) {
   const purchasePath = `/courses/${course.slug}/purchase`;
 
