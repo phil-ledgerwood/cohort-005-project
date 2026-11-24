@@ -106,6 +106,8 @@ function noteStatusText(status: NoteEditorStatus): string {
       return `${status.over.toLocaleString("en")} characters over the limit`;
     case "unsaved":
       return "Unsaved changes";
+    case "cleared":
+      return "A note can't be empty, so your saved note is kept";
     case "saved":
       return `Saved · last edited ${formatRelativeTime(status.updatedAt)}`;
     case "empty":

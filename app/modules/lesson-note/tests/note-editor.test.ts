@@ -67,9 +67,9 @@ describe("describeNoteEditor", () => {
     expect(state.canSave).toBe(true);
   });
 
-  it("does not offer to save a cleared Note", () => {
-    const state = describeNoteEditor({ draft: "", saved, saving: false });
-    expect(state.status).toEqual({ kind: "unsaved" });
+  it("says why a cleared Note cannot be saved, and keeps the saved one", () => {
+    const state = describeNoteEditor({ draft: " \n", saved, saving: false });
+    expect(state.status).toEqual({ kind: "cleared" });
     expect(state.canSave).toBe(false);
   });
 

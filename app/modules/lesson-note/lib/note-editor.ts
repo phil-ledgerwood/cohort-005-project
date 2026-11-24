@@ -15,6 +15,7 @@ export type NoteEditorStatus =
   | { kind: "error"; message: string }
   | { kind: "too-long"; over: number }
   | { kind: "unsaved" }
+  | { kind: "cleared" }
   | { kind: "saved"; updatedAt: string }
   | { kind: "empty" };
 
@@ -26,12 +27,12 @@ export type NoteEditorState = {
 };
 
 // The server trims before it stores, so a trailing newline is not a change.
-function measure(draft: string) {
+function bodyAsStored(draft: string) {
   return draft.trim();
 }
 
 export function describeNoteEditor(input: NoteEditorInput): NoteEditorState {
-  const body = measure(input.draft);
+  const body = bodyAsStored(input.draft);
   const length = body.length;
   const changed = body !== (input.saved?.body ?? "");
   const tooLong = length > MAX_NOTE_LENGTH;
@@ -54,6 +55,7 @@ function statusOf(
     return { kind: "too-long", over: draft.length - MAX_NOTE_LENGTH };
   }
   if (input.error) return { kind: "error", message: input.error };
+  if (draft.changed && draft.length === 0) return { kind: "cleared" };
   if (draft.changed) return { kind: "unsaved" };
   if (input.saved) return { kind: "saved", updatedAt: input.saved.updatedAt };
   return { kind: "empty" };
